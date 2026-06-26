@@ -1,1 +1,0 @@
-# india-heatrisk-portal
