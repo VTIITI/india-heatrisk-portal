@@ -715,627 +715,614 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'About': "### 🌡️ India HeatRisk Tracker\nReal-time heat stress prediction powered by ECMWF forecasts and IMD thresholds."
+        'About': "### 🌡️ India HeatRisk Tracker\nReal-time humid-heat stress prediction powered by "
+                 "ECMWF forecasts and peer-reviewed tropical heat-stress indices."
     }
 )
 
-# Custom CSS Styling for Enhanced Visual Appeal
 st.markdown("""
     <style>
-    /* Main container styling */
-    .main {
-        padding-top: 1rem;
-    }
-    
-    /* Header styling */
-    h1 {
-        font-size: 2.5rem;
-        color: #FF6B35;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        margin-bottom: 0.5rem;
-    }
-    
-    h2 {
-        color: #FF6B35;
-        border-bottom: 3px solid #FF6B35;
-        padding-bottom: 0.5rem;
-    }
-    
-    /* Metric cards styling */
+    .main { padding-top: 1rem; }
+    h1 { font-size: 2.5rem; color: #FF6B35; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); margin-bottom: 0.5rem; }
+    h2 { color: #FF6B35; border-bottom: 3px solid #FF6B35; padding-bottom: 0.5rem; }
     [data-testid="stMetric"] {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 1.5rem;
-        border-radius: 12px;
-        color: white;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        padding: 1.5rem; border-radius: 12px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    
-    [data-testid="stMetricLabel"] {
-        color: rgba(255,255,255,0.9);
-        font-weight: 600;
-    }
-    
-    [data-testid="stMetricDelta"] {
-        color: rgba(255,255,255,0.8);
-    }
-    
-    /* Button styling */
+    [data-testid="stMetricLabel"] { color: rgba(255,255,255,0.9); font-weight: 600; }
+    [data-testid="stMetricDelta"] { color: rgba(255,255,255,0.8); }
     .stButton > button {
         background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
-        color: white;
-        border: none;
-        padding: 0.75rem 2rem;
-        border-radius: 8px;
-        font-weight: 600;
-        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-        transition: all 0.3s ease;
+        color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600;
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3); transition: all 0.3s ease;
     }
-    
-    .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-    }
-    
-    /* Selectbox and radio styling */
+    .stButton > button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4); }
     .stSelectbox, .stRadio {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 8px;
-        border-left: 4px solid #FF6B35;
+        background-color: #f8f9fa; padding: 1rem; border-radius: 8px; border-left: 4px solid #FF6B35;
     }
-    
-    /* Sidebar styling */
-    .sidebar .sidebar-content {
-        padding: 2rem 1rem;
-    }
-    
-    /* Info boxes */
-    .stInfo, .stWarning, .stError {
-        border-radius: 8px;
-        padding: 1rem;
-    }
-    
-    /* Control panel container */
     .control-panel {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        padding: 1.5rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
-    
-    /* Legend styling */
-    .legend-box {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 2px solid #FF6B35;
-        margin: 1rem 0;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .legend-item {
-        display: flex;
-        align-items: center;
-        margin: 0.75rem 0;
-        font-weight: 500;
-    }
-    
+    .legend-item { display: flex; align-items: center; margin: 0.75rem 0; font-weight: 500; }
     .legend-color {
-        display: inline-block;
-        width: 25px;
-        height: 25px;
-        border-radius: 4px;
-        margin-right: 1rem;
-        border: 2px solid rgba(0,0,0,0.1);
+        display: inline-block; width: 25px; height: 25px; border-radius: 4px;
+        margin-right: 1rem; border: 2px solid rgba(0,0,0,0.1);
     }
-    
-    /* Responsive layout improvements */
+    .index-card {
+        background: white; border: 1px solid #eee; border-left: 4px solid #FF6B35;
+        border-radius: 8px; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; font-size: 0.9rem;
+    }
     @media (max-width: 768px) {
-        h1 {
-            font-size: 1.8rem;
-        }
-        .stButton > button {
-            width: 100%;
-        }
+        h1 { font-size: 1.8rem; }
+        .stButton > button { width: 100%; }
     }
     </style>
     """, unsafe_allow_html=True)
 
 # ==========================================
-# DATA PROCESSING & UTILITY FUNCTIONS
+# HEAT-STRESS INDEX DEFINITIONS (tropical / South-Asian literature)
 # ==========================================
-def get_risk_category_info(risk_level):
-    """Returns color, description, and recommendations for each risk level."""
-    categories = {
-        0: {
-            'name': 'Low Risk',
-            'color': '#228B22',
-            'hex': '#228B22',
-            'description': 'Little to no risk for the general population',
-            'action': 'No special precautions needed'
-        },
-        1: {
-            'name': 'Moderate Risk',
-            'color': '#FFD700',
-            'hex': '#FFD700',
-            'description': 'Impacts sensitive individuals (outdoor workers, elderly)',
-            'action': 'Stay hydrated, take frequent breaks'
-        },
-        2: {
-            'name': 'High Risk',
-            'color': '#FF8C00',
-            'hex': '#FF8C00',
-            'description': 'Significant impact without proper cooling/hydration',
-            'action': 'Avoid outdoor activities, stay indoors'
-        },
-        3: {
-            'name': 'Heat Wave',
-            'color': '#FF0000',
-            'hex': '#FF0000',
-            'description': 'IMD Heat Wave threshold - Public health concern',
-            'action': 'Follow official heat advisories strictly'
-        },
-        4: {
-            'name': 'Severe Heat Wave',
-            'color': '#D1117B',
-            'hex': '#D1117B',
-            'description': 'Extreme danger to all populations',
-            'action': 'Extreme emergency protocols active'
-        }
-    }
-    return categories.get(risk_level, categories[0])
+# Each index has: a formula (implemented below), a set of published category
+# bands, and colours. Sources are well-established, publicly documented
+# meteorological formulas (not verbatim text), commonly used in Indian and
+# tropical heat-stress studies:
+#   - Heat Index      : Rothfusz regression, US NWS (1990), widely adapted by
+#                        IMD's experimental "Feels Like" advisories for humid India.
+#   - WBGT (outdoor)   : Australian Bureau of Meteorology simplified approximation,
+#                        the basis of ACGIH/ISO 7243-style occupational heat-stress
+#                        guidance referenced in Indian Heat Action Plans (NDMA).
+#   - Humidex          : Environment Canada, adapted in South Asian urban climate studies.
+#   - Discomfort Index : Thom (1959) bioclimatic index, used extensively in Indian
+#                        and other tropical urban comfort studies.
+INDEX_DEFINITIONS = {
+    "heat_index": {
+        "label": "Heat Index (NWS Rothfusz, °C)",
+        "short": "HI",
+        "units": "°C",
+        "needs_humidity": True,
+        "bands": [
+            (-100, 27, "Caution", "#228B22"),
+            (27, 32, "Extreme Caution", "#FFD700"),
+            (32, 41, "Danger", "#FF8C00"),
+            (41, 54, "Extreme Danger", "#FF0000"),
+            (54, 200, "Catastrophic", "#D1117B"),
+        ],
+        "note": "Apparent temperature combining dry-bulb temperature and relative humidity "
+                "(Rothfusz regression, US National Weather Service)."
+    },
+    "wbgt": {
+        "label": "WBGT — Outdoor Approx. (°C)",
+        "short": "WBGT",
+        "units": "°C",
+        "needs_humidity": True,
+        "bands": [
+            (-100, 23, "Low", "#228B22"),
+            (23, 25, "Moderate", "#FFD700"),
+            (25, 28, "High", "#FF8C00"),
+            (28, 30, "Very High", "#FF0000"),
+            (30, 200, "Extreme", "#D1117B"),
+        ],
+        "note": "Simplified outdoor Wet-Bulb Globe Temperature (Australian BoM approximation), "
+                "the standard metric behind occupational heat-stress work/rest guidance."
+    },
+    "humidex": {
+        "label": "Humidex (°C)",
+        "short": "Humidex",
+        "units": "°C",
+        "needs_humidity": True,
+        "bands": [
+            (-100, 30, "Little Discomfort", "#228B22"),
+            (30, 40, "Some Discomfort", "#FFD700"),
+            (40, 45, "Great Discomfort", "#FF8C00"),
+            (45, 54, "Dangerous", "#FF0000"),
+            (54, 200, "Heat Stroke Risk", "#D1117B"),
+        ],
+        "note": "Environment Canada comfort index combining temperature and vapour pressure."
+    },
+    "discomfort_index": {
+        "label": "Discomfort Index (Thom, °C)",
+        "short": "DI",
+        "units": "°C",
+        "needs_humidity": True,
+        "bands": [
+            (-100, 21, "Comfortable", "#228B22"),
+            (21, 24, "Some Discomfort", "#FFD700"),
+            (24, 27, "Most Feel Discomfort", "#FF8C00"),
+            (27, 29, "Danger", "#FF0000"),
+            (29, 200, "Medical Emergency", "#D1117B"),
+        ],
+        "note": "Thom's (1959) bioclimatic discomfort index, widely applied in tropical urban studies."
+    },
+    "imd_tmax": {
+        "label": "IMD Absolute Tmax Threshold (°C)",
+        "short": "Tmax",
+        "units": "°C",
+        "needs_humidity": False,
+        "bands": [
+            (-100, 40, "Low Risk", "#228B22"),
+            (40, 43, "Moderate Risk", "#FFD700"),
+            (43, 45, "High Risk", "#FF8C00"),
+            (45, 47, "Heat Wave", "#FF0000"),
+            (47, 200, "Severe Heat Wave", "#D1117B"),
+        ],
+        "note": "The original single-variable absolute-temperature threshold, kept for reference/comparison."
+    },
+}
+INDEX_KEYS = list(INDEX_DEFINITIONS.keys())
 
+
+def classify_to_risk(values, bands):
+    """Vectorised mapping from raw index values to a 0-4 risk tier using the band table."""
+    risk = np.zeros_like(values, dtype=float)
+    for level, (lo, hi, _name, _color) in enumerate(bands):
+        risk = np.where((values >= lo) & (values < hi), level, risk)
+    return risk
+
+
+def get_band_info(index_key, level):
+    bands = INDEX_DEFINITIONS[index_key]["bands"]
+    level = int(min(max(level, 0), len(bands) - 1))
+    lo, hi, name, color = bands[level]
+    return {"name": name, "color": color, "range": (lo, hi)}
+
+
+# ==========================================
+# HEAT-STRESS INDEX FORMULAS
+# ==========================================
+def saturation_vapor_pressure_hpa(temp_c):
+    """Magnus-Tetens saturation vapour pressure (hPa)."""
+    return 6.105 * np.exp(17.27 * temp_c / (237.7 + temp_c))
+
+
+def relative_humidity_from_dewpoint(temp_c, dewpoint_c):
+    """RH (%) from air temperature and dewpoint temperature via Magnus-Tetens."""
+    e_actual = saturation_vapor_pressure_hpa(dewpoint_c)
+    e_sat = saturation_vapor_pressure_hpa(temp_c)
+    rh = 100.0 * (e_actual / e_sat)
+    return np.clip(rh, 1.0, 100.0)
+
+
+def vapor_pressure_hpa(temp_c, rh_pct):
+    return (rh_pct / 100.0) * saturation_vapor_pressure_hpa(temp_c)
+
+
+def compute_heat_index_c(temp_c, rh_pct):
+    """NWS Rothfusz regression heat index. Formula works in Fahrenheit; converted back to °C."""
+    t_f = temp_c * 9.0 / 5.0 + 32.0
+    rh = rh_pct
+    hi_simple = 0.5 * (t_f + 61.0 + (t_f - 68.0) * 1.2 + rh * 0.094)
+    t_avg = (t_f + hi_simple) / 2.0
+
+    hi_full = (
+        -42.379 + 2.04901523 * t_f + 10.14333127 * rh
+        - 0.22475541 * t_f * rh - 0.00683783 * t_f ** 2
+        - 0.05481717 * rh ** 2 + 0.00122874 * t_f ** 2 * rh
+        + 0.00085282 * t_f * rh ** 2 - 0.00000199 * t_f ** 2 * rh ** 2
+    )
+    # Low-RH adjustment
+    adj_lo = ((13.0 - rh) / 4.0) * np.sqrt(np.maximum((17.0 - np.abs(t_f - 95.0)) / 17.0, 0.0))
+    hi_full_adj = np.where((rh < 13) & (t_f >= 80) & (t_f <= 112), hi_full - adj_lo, hi_full)
+    # High-RH adjustment
+    adj_hi = ((rh - 85.0) / 10.0) * ((87.0 - t_f) / 5.0)
+    hi_full_adj = np.where((rh > 85) & (t_f >= 80) & (t_f <= 87), hi_full_adj + adj_hi, hi_full_adj)
+
+    hi_f = np.where(t_avg < 80.0, hi_simple, hi_full_adj)
+    hi_f = np.where(t_f < 80.0, t_f, hi_f)  # HI undefined/unnecessary below 80F, fall back to actual temp
+    return (hi_f - 32.0) * 5.0 / 9.0
+
+
+def compute_wbgt_outdoor_c(temp_c, rh_pct):
+    """Simplified outdoor WBGT approximation (Australian Bureau of Meteorology)."""
+    e = vapor_pressure_hpa(temp_c, rh_pct)
+    return 0.567 * temp_c + 0.393 * e + 3.94
+
+
+def compute_humidex_c(temp_c, rh_pct):
+    """Environment Canada Humidex."""
+    e = vapor_pressure_hpa(temp_c, rh_pct)
+    return temp_c + 0.5555 * (e - 10.0)
+
+
+def compute_discomfort_index_c(temp_c, rh_pct):
+    """Thom's (1959) Discomfort Index."""
+    return temp_c - 0.55 * (1 - 0.01 * rh_pct) * (temp_c - 14.5)
+
+
+INDEX_FORMULAS = {
+    "heat_index": compute_heat_index_c,
+    "wbgt": compute_wbgt_outdoor_c,
+    "humidex": compute_humidex_c,
+    "discomfort_index": compute_discomfort_index_c,
+}
+
+
+# ==========================================
+# DATA FETCH & PROCESSING
+# ==========================================
 @st.cache_data(ttl=3600)
 def fetch_and_process_forecast():
     """
-    Fetches and processes ECMWF forecast data with fallback to synthetic data.
-    Includes workspace cleanup and IMD threshold classification.
+    Fetches 2 m temperature, 2 m dewpoint and 3-hourly max temperature from ECMWF
+    open data, derives relative humidity, and computes every heat-stress index in
+    INDEX_DEFINITIONS. Falls back to a synthetic-but-realistic dataset if the
+    live feed is unavailable.
+    Returns: dict of {index_key: (values_dataarray, risk_dataarray)}, plus the
+    list of valid_time coordinates.
     """
     today_dt = datetime.utcnow()
     target_dates = [(today_dt + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(5)]
     base_date = today_dt.strftime("%Y-%m-%d")
-    target_file = f"ecmwf_india_{base_date}.grib"
-    
-    # Workspace cleanup
+    inst_file = f"ecmwf_india_inst_{base_date}.grib"
+    mx_file = f"ecmwf_india_mx_{base_date}.grib"
+
     for f in os.listdir("."):
-        if f.startswith("ecmwf_india_") and f.endswith(".grib") and f != target_file:
+        if f.startswith("ecmwf_india_") and f.endswith(".grib") and f not in (inst_file, mx_file):
             try:
                 os.remove(f)
-            except:
+            except Exception:
                 pass
 
-    if os.path.exists(target_file):
-        return parse_grib(target_file)
-
     try:
-        client = Client(source="ecmwf")
         peak_steps = [6, 9, 12, 30, 33, 36, 54, 57, 60, 78, 81, 84, 102, 105, 108]
-        client.retrieve(
-            date=base_date, time=0, stream="oper", type="fc", 
-            step=peak_steps, param="mx2t3", target=target_file
-        )
-        return parse_grib(target_file)
+        client = Client(source="ecmwf")
+
+        if not os.path.exists(inst_file):
+            client.retrieve(
+                date=base_date, time=0, stream="oper", type="fc",
+                step=peak_steps, param=["2t", "2d"], target=inst_file
+            )
+        if not os.path.exists(mx_file):
+            client.retrieve(
+                date=base_date, time=0, stream="oper", type="fc",
+                step=peak_steps, param="mx2t3", target=mx_file
+            )
+        return parse_grib(inst_file, mx_file)
     except Exception:
         return generate_instant_fallback(target_dates)
 
+
+def _swap_to_valid_time(da):
+    valid_times = da.step.values + da.time.values
+    da = da.assign_coords(valid_time=("step", valid_times)).swap_dims({"step": "valid_time"})
+    return da
+
+
+def parse_grib(inst_file, mx_file):
+    ds_inst = xr.open_dataset(inst_file, engine="cfgrib",
+                               backend_kwargs={'filter_by_keys': {'typeOfLevel': 'heightAboveGround'}})
+    t2m_c = ds_inst["t2m"].sel(latitude=slice(38, 6), longitude=slice(66, 98)) - 273.15
+    d2m_c = ds_inst["d2m"].sel(latitude=slice(38, 6), longitude=slice(66, 98)) - 273.15
+    t2m_c = _swap_to_valid_time(t2m_c)
+    d2m_c = _swap_to_valid_time(d2m_c)
+
+    ds_mx = xr.open_dataset(mx_file, engine="cfgrib",
+                             backend_kwargs={'filter_by_keys': {'typeOfLevel': 'heightAboveGround'}})
+    var_name = 'mx2t3' if 'mx2t3' in ds_mx.data_vars else list(ds_mx.data_vars)[0]
+    tmax_raw = ds_mx[var_name].sel(latitude=slice(38, 6), longitude=slice(66, 98)) - 273.15
+    tmax_raw = _swap_to_valid_time(tmax_raw)
+    tmax_daily = tmax_raw.resample(valid_time='1D').max()
+
+    rh = xr.apply_ufunc(relative_humidity_from_dewpoint, t2m_c, d2m_c)
+
+    results = {}
+    for key, definition in INDEX_DEFINITIONS.items():
+        if key == "imd_tmax":
+            values_daily = tmax_daily
+        else:
+            formula = INDEX_FORMULAS[key]
+            inst_values = xr.apply_ufunc(formula, t2m_c, rh)
+            values_daily = inst_values.resample(valid_time='1D').max()
+        risk_daily = xr.apply_ufunc(classify_to_risk, values_daily,
+                                     kwargs={"bands": definition["bands"]})
+        results[key] = (values_daily, risk_daily)
+    return results
+
+
 def generate_instant_fallback(target_dates):
-    """Generates realistic baseline temperature matrix for India."""
+    """Synthetic-but-plausible temperature + humidity fields for demo/offline use."""
     lats = np.arange(38.0, 5.75, -0.25)
     lons = np.arange(66.0, 98.25, 0.25)
     num_days, num_lats, num_lons = len(target_dates), len(lats), len(lons)
-    
+
     tmax_values = np.zeros((num_days, num_lats, num_lons))
+    rh_values = np.zeros((num_days, num_lats, num_lons))
     for d in range(num_days):
         for i, lat in enumerate(lats):
             for j, lon in enumerate(lons):
                 base = 39.0
-                if lat > 32: base -= 12.0
-                elif lat < 15: base -= 3.0
-                if lon < 74 and 20 < lat < 30: base += 6.5
-                tmax_values[d, i, j] = base + np.sin(d + lat/4.0) * 1.5
+                if lat > 32:
+                    base -= 12.0
+                elif lat < 15:
+                    base -= 3.0
+                if lon < 74 and 20 < lat < 30:
+                    base += 6.5
+                tmax_values[d, i, j] = base + np.sin(d + lat / 4.0) * 1.5
 
-    tmax_ds = xr.DataArray(
-        tmax_values, 
-        coords=[pd.to_datetime(target_dates), lats, lons], 
-        dims=["valid_time", "latitude", "longitude"]
-    )
-    
-    heat_risk = xr.zeros_like(tmax_ds)
-    heat_risk = xr.where((tmax_ds >= 40.0) & (tmax_ds < 43.0), 1, heat_risk)
-    heat_risk = xr.where((tmax_ds >= 43.0) & (tmax_ds < 45.0), 2, heat_risk)
-    heat_risk = xr.where((tmax_ds >= 45.0) & (tmax_ds < 47.0), 3, heat_risk)
-    heat_risk = xr.where(tmax_ds >= 47.0, 4, heat_risk)
-    return tmax_ds, heat_risk
+                # Humidity climatology: coastal / eastern / peninsular India is more humid,
+                # the Thar desert and interior northwest are drier.
+                rh_base = 55.0
+                if lon > 85 or lat < 15:            # east coast, Bay of Bengal, deep south
+                    rh_base = 78.0
+                elif 68 <= lon <= 75 and 22 <= lat <= 30:  # Thar desert belt
+                    rh_base = 25.0
+                elif lon < 74 and 8 <= lat <= 20:    # west coast, Konkan
+                    rh_base = 75.0
+                rh_values[d, i, j] = np.clip(rh_base + np.cos(d + lon / 5.0) * 5.0, 15.0, 95.0)
 
-def parse_grib(grib_path):
-    """Parses GRIB file and applies IMD heat risk classification."""
-    ds = xr.open_dataset(grib_path, engine="cfgrib", 
-                         backend_kwargs={'filter_by_keys': {'typeOfLevel': 'heightAboveGround'}})
-    var_name = 'mx2t3' if 'mx2t3' in ds.data_vars else list(ds.data_vars)[0]
-    india_raw = ds[var_name].sel(latitude=slice(38, 6), longitude=slice(66, 98))
-    tmax_c = india_raw - 273.15
-    
-    valid_times = tmax_c.step.values + tmax_c.time.values
-    tmax_c = tmax_c.assign_coords(valid_time=("step", valid_times)).swap_dims({"step": "valid_time"})
-    tmax_daily = tmax_c.resample(valid_time='1D').max()
-    
-    heat_risk = xr.zeros_like(tmax_daily)
-    heat_risk = xr.where((tmax_daily >= 40.0) & (tmax_daily < 43.0), 1, heat_risk)
-    heat_risk = xr.where((tmax_daily >= 43.0) & (tmax_daily < 45.0), 2, heat_risk)
-    heat_risk = xr.where((tmax_daily >= 45.0) & (tmax_daily < 47.0), 3, heat_risk)
-    heat_risk = xr.where(tmax_daily >= 47.0, 4, heat_risk)
-    return tmax_daily, heat_risk
+    coords = [pd.to_datetime(target_dates), lats, lons]
+    dims = ["valid_time", "latitude", "longitude"]
+    tmax_da = xr.DataArray(tmax_values, coords=coords, dims=dims)
+    rh_da = xr.DataArray(rh_values, coords=coords, dims=dims)
 
-def load_india_shapefile():
-    """
-    Loads India border and state boundaries from GeoJSON sources.
-    Returns both country boundary and state boundaries.
-    """
-    # Country boundary
-    country_url = "https://raw.githubusercontent.com/datameet/maps/master/Country/india-land-simplified.geojson"
-    
-    # State boundaries (more detailed)
-    states_url = "https://raw.githubusercontent.com/datameet/maps/master/States/states-simplified.geojson"
-    
-    features = {
-        'country': None,
-        'states': None
+    results = {}
+    for key, definition in INDEX_DEFINITIONS.items():
+        if key == "imd_tmax":
+            values_daily = tmax_da
+        else:
+            formula = INDEX_FORMULAS[key]
+            values_daily = xr.apply_ufunc(formula, tmax_da, rh_da)
+        risk_daily = xr.apply_ufunc(classify_to_risk, values_daily, kwargs={"bands": definition["bands"]})
+        results[key] = (values_daily, risk_daily)
+    return results
+
+
+@st.cache_data(ttl=86400)
+def load_india_boundaries():
+    """Loads country, state and district boundary GeoJSON for overlaying on the map."""
+    sources = {
+        'country': "https://raw.githubusercontent.com/datameet/maps/master/Country/india-land-simplified.geojson",
+        'states': "https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson",
+        'districts': "https://raw.githubusercontent.com/geohacker/india/master/district/india_district.geojson",
     }
-    
-    try:
-        response = requests.get(country_url, timeout=10)
-        if response.status_code == 200:
-            features['country'] = response.json()
-    except Exception as e:
-        st.warning(f"Could not load country boundaries: {e}")
-    
-    try:
-        response = requests.get(states_url, timeout=10)
-        if response.status_code == 200:
-            features['states'] = response.json()
-    except Exception as e:
-        st.warning(f"Could not load state boundaries: {e}")
-    
+    features = {'country': None, 'states': None, 'districts': None}
+    for key, url in sources.items():
+        try:
+            response = requests.get(url, timeout=25)
+            if response.status_code == 200:
+                features[key] = response.json()
+        except Exception:
+            pass
     return features
 
-def add_shapefile_to_map(fig, shapefile_data, show_states=True):
-    """Adds India borders and state boundaries to the Plotly figure."""
-    
-    # Add country boundary
-    if shapefile_data['country']:
-        geojson_data = shapefile_data['country']
-        for feature in geojson_data['features']:
-            geometry = feature['geometry']
-            
-            if geometry['type'] == 'Polygon':
-                for ring in geometry['coordinates']:
-                    lons_b = [coords[0] for coords in ring]
-                    lats_b = [coords[1] for coords in ring]
-                    fig.add_trace(go.Scatter(
-                        x=lons_b, y=lats_b, mode='lines',
-                        line=dict(color='black', width=3),
-                        showlegend=False, hoverinfo='skip',
-                        name='India Border'
-                    ))
-            elif geometry['type'] == 'MultiPolygon':
-                for polygon in geometry['coordinates']:
-                    for ring in polygon:
-                        lons_b = [coords[0] for coords in ring]
-                        lats_b = [coords[1] for coords in ring]
-                        fig.add_trace(go.Scatter(
-                            x=lons_b, y=lats_b, mode='lines',
-                            line=dict(color='black', width=3),
-                            showlegend=False, hoverinfo='skip'
-                        ))
-    
-    # Add state boundaries
-    if show_states and shapefile_data['states']:
-        geojson_data = shapefile_data['states']
-        for feature in geojson_data['features']:
-            geometry = feature['geometry']
-            
-            if geometry['type'] == 'Polygon':
-                for ring in geometry['coordinates']:
-                    lons_b = [coords[0] for coords in ring]
-                    lats_b = [coords[1] for coords in ring]
-                    fig.add_trace(go.Scatter(
-                        x=lons_b, y=lats_b, mode='lines',
-                        line=dict(color='rgba(100,100,100,0.3)', width=0.8),
-                        showlegend=False, hoverinfo='skip'
-                    ))
-            elif geometry['type'] == 'MultiPolygon':
-                for polygon in geometry['coordinates']:
-                    for ring in polygon:
-                        lons_b = [coords[0] for coords in ring]
-                        lats_b = [coords[1] for coords in ring]
-                        fig.add_trace(go.Scatter(
-                            x=lons_b, y=lats_b, mode='lines',
-                            line=dict(color='rgba(100,100,100,0.3)', width=0.8),
-                            showlegend=False, hoverinfo='skip'
-                        ))
 
-def calculate_statistics(grid_tmax, grid_risk):
-    """Calculate statistical summaries from forecast grids."""
-    stats = {
-        'max_temp': np.nanmax(grid_tmax),
-        'mean_temp': np.nanmean(grid_tmax),
-        'min_temp': np.nanmin(grid_tmax),
-        'std_temp': np.nanstd(grid_tmax),
+def _iter_rings(geometry):
+    if geometry['type'] == 'Polygon':
+        for ring in geometry['coordinates']:
+            yield ring
+    elif geometry['type'] == 'MultiPolygon':
+        for polygon in geometry['coordinates']:
+            for ring in polygon:
+                yield ring
+
+
+def add_boundary_layer(fig, geojson_data, color, width, name, dash=None):
+    if not geojson_data:
+        return
+    line = dict(color=color, width=width)
+    if dash:
+        line["dash"] = dash
+    first = True
+    for feature in geojson_data['features']:
+        for ring in _iter_rings(feature['geometry']):
+            lons_b = [c[0] for c in ring]
+            lats_b = [c[1] for c in ring]
+            fig.add_trace(go.Scatter(
+                x=lons_b, y=lats_b, mode='lines', line=line,
+                showlegend=False, hoverinfo='skip', name=name
+            ))
+            first = False
+
+
+def calculate_statistics(grid_values, grid_risk):
+    return {
+        'max_val': np.nanmax(grid_values),
+        'mean_val': np.nanmean(grid_values),
+        'min_val': np.nanmin(grid_values),
+        'std_val': np.nanstd(grid_values),
         'high_risk_pixels': np.sum(grid_risk >= 2),
-        'severe_risk_pixels': np.sum(grid_risk >= 3)
+        'severe_risk_pixels': np.sum(grid_risk >= 3),
     }
-    return stats
+
 
 # ==========================================
 # MAIN APPLICATION INTERFACE
 # ==========================================
-
-# Header with improved styling
 col1, col2 = st.columns([3, 1])
 with col1:
     st.markdown("# ☀️ India HeatRisk Tracker")
-    st.markdown("**Advanced 5-day heat stress forecast with IMD thresholds & interactive mapping**")
+    st.markdown("**5-day tropical heat-stress forecast using published bioclimatic indices, "
+                "mapped down to state & district level**")
 with col2:
     st.info("🔄 Updated every 6 hours\n\n⚡ ECMWF IFS 0.25°")
 
 st.divider()
 
-# Sidebar with controls
 with st.sidebar:
     st.markdown("## 🎛️ Control Panel")
-    
+
+    index_labels = {k: v["label"] for k, v in INDEX_DEFINITIONS.items()}
+    selected_index_key = st.selectbox(
+        "🧪 Heat-Stress Index",
+        INDEX_KEYS,
+        format_func=lambda k: index_labels[k],
+        index=1,  # default to WBGT, the outdoor-labour standard
+        help="Choose which published tropical heat-stress index to visualise"
+    )
+
     show_info = st.checkbox("📖 Show Information Panel", value=True)
     show_states = st.checkbox("🗺️ Show State Boundaries", value=True)
-    layer_toggle = st.radio(
-        "📊 Layer Configuration",
-        ["IMD Heat Risk Index", "Raw Temperature (°C)", "Temperature + Risk Overlay"],
-        help="Choose the visualization layer to display"
-    )
-    
+    show_districts = st.checkbox("📍 Show District Boundaries", value=False,
+                                  help="Larger file, may take a few extra seconds to load")
+
     st.divider()
-    
-    st.markdown("### About HeatRisk")
-    st.markdown("""
-    **HeatRisk** combines:
-    - 🌡️ Absolute peak temperatures
-    - 📈 Multi-day heat accumulation
-    - 📊 Departure from climatological norms
-    
-    Aligned with **India Meteorological Department** classifications.
-    """)
-    
+    st.markdown("### About this index")
+    st.markdown(f"<div class='index-card'>{INDEX_DEFINITIONS[selected_index_key]['note']}</div>",
+                unsafe_allow_html=True)
+
     st.divider()
-    
     st.markdown("### 📚 Risk Categories")
-    categories_info = [
-        ("🟢 Low", "No action needed", "#228B22"),
-        ("🟡 Moderate", "Caution advised", "#FFD700"),
-        ("🟠 High", "Active precautions", "#FF8C00"),
-        ("🔴 Heat Wave", "IMD threshold", "#FF0000"),
-        ("🟣 Severe HW", "Emergency status", "#D1117B"),
-    ]
-    
-    for level_name, action, color in categories_info:
-        st.markdown(f"<div class='legend-item'>"
-                   f"<div class='legend-color' style='background-color: {color};'></div>"
-                   f"<div><strong>{level_name}</strong><br/><small>{action}</small></div>"
-                   f"</div>", unsafe_allow_html=True)
+    for lo, hi, name, color in INDEX_DEFINITIONS[selected_index_key]["bands"]:
+        range_txt = f"≥{lo:g}" if hi >= 199 else (f"<{hi:g}" if lo <= -99 else f"{lo:g}–{hi:g}")
+        st.markdown(
+            f"<div class='legend-item'><div class='legend-color' style='background-color:{color};'></div>"
+            f"<div><strong>{name}</strong><br/><small>{range_txt} {INDEX_DEFINITIONS[selected_index_key]['units']}</small></div></div>",
+            unsafe_allow_html=True
+        )
 
 try:
-    # Load forecast data
-    with st.spinner("🔄 Loading forecast data..."):
-        tmax_ds, risk_ds = fetch_and_process_forecast()
-    
+    with st.spinner("🔄 Loading forecast data & computing heat-stress indices..."):
+        all_index_results = fetch_and_process_forecast()
+
+    values_ds, risk_ds = all_index_results[selected_index_key]
+    definition = INDEX_DEFINITIONS[selected_index_key]
+
     available_days = risk_ds.valid_time.values
     available_days_str = [pd.to_datetime(d).strftime("%a, %b %d") for d in available_days]
-    
-    # Control panel
+
     st.markdown("<div class='control-panel'>", unsafe_allow_html=True)
     ctrl_col1, ctrl_col2, ctrl_col3 = st.columns([2, 2, 2])
-    
+
     with ctrl_col1:
-        selected_day_str = st.selectbox(
-            "📅 Select Forecast Date",
-            available_days_str,
-            help="Choose the date to visualize"
-        )
+        selected_day_str = st.selectbox("📅 Select Forecast Date", available_days_str)
         selected_idx = available_days_str.index(selected_day_str)
-    
+
     with ctrl_col2:
-        refresh_data = st.button("🔄 Refresh Data", use_container_width=True)
-        if refresh_data:
+        if st.button("🔄 Refresh Data", use_container_width=True):
             st.cache_data.clear()
             st.rerun()
-    
+
     with ctrl_col3:
         st.info(f"Generated: {pd.to_datetime(available_days[0]).strftime('%Y-%m-%d %H:%M UTC')}")
-    
+
     st.markdown("</div>", unsafe_allow_html=True)
-    
-    # Extract grid data
+
     grid_risk = risk_ds.isel(valid_time=selected_idx).values
-    grid_tmax = tmax_ds.isel(valid_time=selected_idx).values
+    grid_values = values_ds.isel(valid_time=selected_idx).values
     lats = risk_ds.latitude.values
     lons = risk_ds.longitude.values
-    
-    # Calculate statistics
-    stats = calculate_statistics(grid_tmax, grid_risk)
-    
-    # Create visualization
-    nws_colorscale = [
-        [0.0, '#228B22'],
-        [0.25, '#FFD700'],
-        [0.5, '#FF8C00'],
-        [0.75, '#FF0000'],
-        [1.0, '#D1117B']
-    ]
-    
+
+    stats = calculate_statistics(grid_values, grid_risk)
+
+    band_colors = [b[3] for b in definition["bands"]]
+    n_bands = len(band_colors)
+    colorscale = [[i / (n_bands - 1), color] for i, color in enumerate(band_colors)]
+
     fig = go.Figure()
-    
-    # Add base contour layer
-    if "Heat Risk" in layer_toggle:
-        fig.add_trace(go.Contour(
-            z=grid_risk, x=lons, y=lats,
-            colorscale=nws_colorscale,
-            zmin=0, zmax=4,
-            contours=dict(start=0, end=4, size=1, coloring='heatmap'),
-            line_width=0,
-            colorbar=dict(
-                tickvals=[0, 1, 2, 3, 4],
-                ticktext=['Low', 'Moderate', 'High', 'Heat Wave', 'Severe HW'],
-                title="Risk Tier",
-                thickness=20,
-                len=0.7
-            ),
-            connectgaps=True,
-            hovertemplate="<b>Heat Risk</b><br>Lat: %{y:.2f}<br>Lon: %{x:.2f}<br>Level: %{z}<extra></extra>",
-            name="Heat Risk Index"
-        ))
-    
-    if "Temperature" in layer_toggle:
-        fig.add_trace(go.Contour(
-            z=grid_tmax, x=lons, y=lats,
-            colorscale="RdYlBu_r",
-            colorbar=dict(
-                title="Tmax (°C)",
-                thickness=20,
-                len=0.7,
-                x=1.15
-            ),
-            connectgaps=True,
-            hovertemplate="<b>Temperature</b><br>Lat: %{y:.2f}<br>Lon: %{x:.2f}<br>Temp: %{z:.1f}°C<extra></extra>",
-            name="Temperature",
-            showscale=("Temperature" in layer_toggle and "Overlay" not in layer_toggle)
-        ))
-    
-    # Load and add shapefiles
-    with st.spinner("📍 Loading map boundaries..."):
-        shapefile_data = load_india_shapefile()
-        add_shapefile_to_map(fig, shapefile_data, show_states=show_states)
-    
-    # Update layout
+    fig.add_trace(go.Contour(
+        z=grid_values, x=lons, y=lats,
+        colorscale=colorscale,
+        contours=dict(coloring='heatmap'),
+        line_width=0,
+        colorbar=dict(title=f"{definition['short']} ({definition['units']})", thickness=20, len=0.7),
+        connectgaps=True,
+        hovertemplate=f"<b>{definition['short']}</b><br>Lat: %{{y:.2f}}<br>Lon: %{{x:.2f}}"
+                       f"<br>Value: %{{z:.1f}} {definition['units']}<extra></extra>",
+        name=definition["short"]
+    ))
+
+    with st.spinner("📍 Loading state & district boundaries..."):
+        boundaries = load_india_boundaries()
+        if show_districts:
+            add_boundary_layer(fig, boundaries['districts'], 'rgba(90,90,90,0.55)', 0.6, "Districts")
+        if show_states:
+            add_boundary_layer(fig, boundaries['states'], 'rgba(40,40,40,0.85)', 1.3, "States")
+        add_boundary_layer(fig, boundaries['country'], 'black', 3, "India Border")
+
     fig.update_layout(
-        title=f"<b>India HeatRisk Forecast</b><br><sub>{selected_day_str}</sub>",
-        xaxis=dict(
-            title="Longitude",
-            range=[66, 98],
-            showgrid=True,
-            gridcolor='rgba(200,200,200,0.2)',
-            zeroline=False
-        ),
-        yaxis=dict(
-            title="Latitude",
-            range=[6, 38],
-            showgrid=True,
-            gridcolor='rgba(200,200,200,0.2)',
-            zeroline=False,
-            scaleanchor="x",
-            scaleratio=1
-        ),
+        title=f"<b>India {definition['short']} Forecast</b><br><sub>{selected_day_str}</sub>",
+        xaxis=dict(title="Longitude", range=[66, 98], showgrid=True,
+                   gridcolor='rgba(200,200,200,0.2)', zeroline=False),
+        yaxis=dict(title="Latitude", range=[6, 38], showgrid=True,
+                   gridcolor='rgba(200,200,200,0.2)', zeroline=False,
+                   scaleanchor="x", scaleratio=1),
         height=750,
-        margin=dict(l=40, r=120, t=80, b=40),
+        margin=dict(l=40, r=40, t=80, b=40),
         plot_bgcolor='#f8f9fa',
         paper_bgcolor='white',
         hovermode='closest',
+        dragmode='zoom',
         font=dict(family="Arial, sans-serif", size=12)
     )
-    
-    st.plotly_chart(fig, use_container_width=True, config={'responsive': True})
-    
-    # Statistics and insights
+
+    st.plotly_chart(
+        fig, use_container_width=True,
+        config={'responsive': True, 'scrollZoom': True, 'displaylogo': False,
+                'modeBarButtonsToAdd': ['zoomIn2d', 'zoomOut2d', 'resetScale2d']}
+    )
+    st.caption("🔍 Scroll or pinch to zoom, drag to pan, double-click to reset the view.")
+
     st.divider()
-    
-    st.markdown("### 📊 Forecast Statistics & Metrics")
-    
-    # Key metrics
+    st.markdown(f"### 📊 {definition['label']} — Statistics")
+
     metric_col1, metric_col2, metric_col3, metric_col4 = st.columns(4)
-    
     with metric_col1:
-        st.metric(
-            "🔥 Maximum Temperature",
-            f"{stats['max_temp']:.1f}°C",
-            delta=f"{stats['max_temp']-40:.1f}°C above threshold",
-            delta_color="inverse"
-        )
-    
+        st.metric(f"🔥 Maximum {definition['short']}", f"{stats['max_val']:.1f}{definition['units']}")
     with metric_col2:
-        st.metric(
-            "📈 Mean Temperature",
-            f"{stats['mean_temp']:.1f}°C",
-            delta=f"±{stats['std_temp']:.1f}°C"
-        )
-    
+        st.metric(f"📈 Mean {definition['short']}", f"{stats['mean_val']:.1f}{definition['units']}",
+                  delta=f"±{stats['std_val']:.1f}{definition['units']}")
     with metric_col3:
-        risk_percentage = (stats['high_risk_pixels'] / (grid_risk.size)) * 100
-        st.metric(
-            "⚠️ High Risk Area",
-            f"{risk_percentage:.1f}%",
-            delta=f"{stats['high_risk_pixels']:.0f} grid points"
-        )
-    
+        risk_percentage = (stats['high_risk_pixels'] / grid_risk.size) * 100
+        st.metric("⚠️ High Risk Area", f"{risk_percentage:.1f}%", delta=f"{stats['high_risk_pixels']:.0f} grid points")
     with metric_col4:
-        severe_percentage = (stats['severe_risk_pixels'] / (grid_risk.size)) * 100
-        st.metric(
-            "🚨 Severe Risk Area",
-            f"{severe_percentage:.1f}%",
-            delta=f"{stats['severe_risk_pixels']:.0f} grid points"
-        )
-    
-    # Information panel
+        severe_percentage = (stats['severe_risk_pixels'] / grid_risk.size) * 100
+        st.metric("🚨 Severe Risk Area", f"{severe_percentage:.1f}%", delta=f"{stats['severe_risk_pixels']:.0f} grid points")
+
     if show_info:
         st.divider()
         st.markdown("### ℹ️ Today's Forecast Information")
-        
         info_col1, info_col2 = st.columns(2)
-        
+
         with info_col1:
             st.info(f"""
             **Forecast Details for {selected_day_str}**
-            
+
+            - **Index:** {definition['label']}
             - **Data Source:** ECMWF IFS (0.25° resolution)
             - **Valid Time:** {pd.to_datetime(available_days[selected_idx]).strftime('%Y-%m-%d %H:%M UTC')}
-            - **Temperature Range:** {stats['min_temp']:.1f}°C to {stats['max_temp']:.1f}°C
-            - **Coverage:** Mainland India (6°N - 38°N, 66°E - 98°E)
+            - **Value Range:** {stats['min_val']:.1f} to {stats['max_val']:.1f} {definition['units']}
+            - **Coverage:** Mainland India (6°N–38°N, 66°E–98°E)
             """)
-        
+
         with info_col2:
-            # Dominant risk category
-            risk_counts = [
-                np.sum(grid_risk == 0),
-                np.sum(grid_risk == 1),
-                np.sum(grid_risk == 2),
-                np.sum(grid_risk == 3),
-                np.sum(grid_risk == 4)
-            ]
-            dominant_risk_idx = np.argmax(risk_counts)
-            dominant_risk = get_risk_category_info(dominant_risk_idx)
-            
+            risk_counts = [np.sum(grid_risk == lvl) for lvl in range(len(definition["bands"]))]
+            dominant_risk_idx = int(np.argmax(risk_counts))
+            dominant = get_band_info(selected_index_key, dominant_risk_idx)
             st.warning(f"""
-            **Dominant Risk Category: {dominant_risk['name'].upper()}**
-            
-            {dominant_risk['description']}
-            
-            **Recommended Action:** {dominant_risk['action']}
+            **Dominant Category: {dominant['name'].upper()}**
+
+            {definition['note']}
             """)
+
+        st.markdown("#### Compare across indices (today's selected date, domain mean)")
+        compare_rows = []
+        for key, (v_ds, r_ds) in all_index_results.items():
+            v_grid = v_ds.isel(valid_time=selected_idx).values
+            compare_rows.append({
+                "Index": INDEX_DEFINITIONS[key]["label"],
+                "Domain Mean": round(float(np.nanmean(v_grid)), 1),
+                "Domain Max": round(float(np.nanmax(v_grid)), 1),
+                "Units": INDEX_DEFINITIONS[key]["units"],
+            })
+        st.dataframe(pd.DataFrame(compare_rows), use_container_width=True, hide_index=True)
 
 except Exception as e:
     st.error(f"""
     ⚠️ **Error Loading Forecast Data**
-    
+
     {str(e)}
-    
+
     Please try again or refresh the page.
     """)
     st.stop()
 
-# Footer
 st.divider()
 st.markdown("""
 <div style='text-align: center; color: #666; padding: 1rem;'>
     <small>
-    🌍 Data Source: ECMWF OpenData | 📊 Classifications: India Meteorological Department (IMD)<br>
-    ⚠️ <strong>Disclaimer:</strong> This is a prototype system for research purposes. 
+    🌍 Data Source: ECMWF OpenData | 🧪 Indices: NWS Heat Index, WBGT (outdoor approx.), Humidex, Thom's Discomfort Index<br>
+    🗺️ Boundaries: DataMeet / GADM-derived state &amp; district GeoJSON<br>
+    ⚠️ <strong>Disclaimer:</strong> This is a prototype system for research purposes.
     Always follow official weather alerts and advisories from IMD.
     </small>
 </div>
