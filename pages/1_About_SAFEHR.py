@@ -1056,12 +1056,12 @@ st.warning("""
 
 st.divider()
 
-st.markdown("""
-<div style='text-align: center; padding: 2rem; background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%); border-radius: 12px; color: white;'>
-    <h3 style='color: white; margin: 0;'>🚀 IEEE GRSS REACT Competition Project Entry</h3>
-    <p style='margin: 0.5rem 0 0 0; font-size: 1rem;'>
-        Demonstrating the power of open-access numerical weather predictions, advanced spatial array processing, and targeted regional biometeorological tracking.
-    </p>
-    <small style='opacity: 0.9;'>Department of Astronomy, Astrophysics, and Space Engineering (DAASE), IIT Indore</small>
-</div>
-""", unsafe_allow_html=True)
+# st.markdown("""
+# <div style='text-align: center; padding: 2rem; background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%); border-radius: 12px; color: white;'>
+#     <h3 style='color: white; margin: 0;'>🚀 IEEE GRSS REACT Competition Project Entry</h3>
+#     <p style='margin: 0.5rem 0 0 0; font-size: 1rem;'>
+#         Demonstrating the power of open-access numerical weather predictions, advanced spatial array processing, and targeted regional biometeorological tracking.
+#     </p>
+#     <small style='opacity: 0.9;'>Department of Astronomy, Astrophysics, and Space Engineering (DAASE), IIT Indore</small>
+# </div>
+# """, unsafe_allow_html=True)
