@@ -2502,7 +2502,7 @@ from datetime import datetime, timedelta
 # PAGE CONFIGURATION & THEMING
 # ==========================================
 st.set_page_config(
-    page_title="India HeatRisk Tracker",
+    page_title="SAFEHR",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
@@ -2759,8 +2759,8 @@ def add_boundary_layer(fig, geojson_data, color, width, dash=None):
 # ==========================================
 # MAIN APPLICATION INTERFACE
 # ==========================================
-st.markdown("# ☀️ India HeatRisk Tracker")
-st.markdown("**Three Essential Heat-Stress Maps: Maximum Temperature, UTCI Values, and Default Threshold Categories**")
+st.markdown("# ☀️ SAFEHR")
+st.markdown("**SAFEHR: A Framework for Sustainable Assessment and Forecasting of Extreme Heatstress for Climate Resilience**")
 st.divider()
 
 with st.sidebar:
@@ -2878,7 +2878,7 @@ st.divider()
 st.markdown("""
 <div style='text-align: center; color: #666; padding: 1rem;'>
     <small>
-        🌍 Data Source: ECMWF OpenData | 🧪 Indices: NWS Heat Index, WBGT (outdoor approx.), Humidex, Thom's Discomfort Index<br>
+        🌍 Data Source: ECMWF OpenData <br>
         🗺️ Boundaries: DataMeet / GADM-derived state &amp; district GeoJSON<br>
         ⚠️ <strong>Disclaimer:</strong> This is a prototype system for research purposes.
         Always follow official weather alerts and advisories from IMD.
