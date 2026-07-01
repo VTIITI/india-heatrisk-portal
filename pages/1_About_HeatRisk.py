@@ -896,7 +896,7 @@ st.divider()
 #         4. **Vector Boundary Overlay:** Blends spatial rasters with high-precision DataMeet/GADM-derived GeoJSON lines.
 #         """)
 
-# st.divider()
+st.divider()
 
 # ==========================================
 # DISCLAIMER & COMPETITION FOOTER
