@@ -749,24 +749,17 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("📚 Understanding the HeatRisk Framework")
+st.title("📚 Understanding SAFEHR Framework")
 st.divider()
 
 # ==========================================
 # INSTITUTIONAL & COMPETITION CONTEXT
 # ==========================================
 st.markdown("""
-## What is India HeatRisk Tracker?
+## What is SAFEHR?
 
-The **India HeatRisk Tracker** is an advanced biometeorological monitoring framework developed by **Vaibhav Tyagi** (Ph.D. Candidate) under the supervision of **Dr. Saurabh Das** at the **Department of Astronomy, Astrophysics, and Space Engineering (DAASE), IIT Indore**. 
-
-This system was engineered specifically for the **IEEE GRSS REACT Competition** to bridge the gap between open-access global numerical weather prediction models and regional public health resilience.
-
-### Core Framework Pillars:
-- **Biometeorological Modeling:** Powered by the **Universal Thermal Climate Index (UTCI)** to compute real human thermal regulation parameters rather than raw temperature alone.
-- **Meteorological Open Source Synergy:** Leverages automated data streams from the European Centre for Medium-Range Weather Forecasts (**ECMWF**) alongside custom python routines (`PYIWR` integration concepts).
-- **Official Local Alignment:** Structured to match standard regional hazard tiers, providing a high-resolution grid layout across a **5-day operational forecast horizon**.
-""")
+**SAFEHR** is an advanced biometeorological monitoring framework developed by **Vaibhav Tyagi** at the **Department of Astronomy, Astrophysics, and Space Engineering (DAASE), IIT Indore**. 
+It is a platform designed to monitor and forecast human heat stress using ECMWF ERA5 reanalysis and forecast data. The framework integrates atmospheric variables with scientifically established thermal stress indicators to generate spatial heat-risk maps and actionable early-warning information across India. Through an interactive web-based interface, SAFEHR transforms complex meteorological datasets into intuitive risk categories that support disaster preparedness, public health planning, climate adaptation, and informed decision-making. By providing timely and accessible heat-risk information, SAFEHR enhances community resilience and contributes to SDG 3 (Good Health and Well-being), SDG 11 (Sustainable Cities and Communities), and SDG 13 (Climate Action).
 
 st.divider()
 
@@ -831,79 +824,79 @@ st.dataframe(df, use_container_width=True, hide_index=True)
 
 st.divider()
 
-# ==========================================
-# COMPARISON TABLE
-# ==========================================
-st.markdown("## 📊 Framework Comparison Matrix")
+# # ==========================================
+# # COMPARISON TABLE
+# # ==========================================
+# st.markdown("## 📊 Framework Comparison Matrix")
 
-comparison_data = {
-    'Feature Core': [
-        'Primary Data Parameter',
-        'Spatial Grid Resolution',
-        'Temporal Scale',
-        'Physiological Factoring',
-        'Boundary Overlays',
-        'Application Aim'
-    ],
-    'Traditional IMD Alerts': [
-        'Absolute $T_{max}$ Ambient',
-        'Station-Based / District Poly',
-        'Daily / Seasonal Forecasts',
-        'None (Meteorological Only)',
-        'Macro-scale political',
-        'National Public Advisories'
-    ],
-    'NWS HeatRisk Model': [
-        'Climatological Anomalies',
-        'County-Level Grids',
-        '7-Day Rolling Horizon',
-        'Basic Temperature/Anomalies',
-        'US County Borders',
-        'Continental US Warning System'
-    ],
-    'India HeatRisk Tracker (IEEE REACT)': [
-        'UTCI + Absolute $T_{max}$',
-        '0.25° Mesh (~28km)',
-        'Hourly Arrays over 5-Day Stream',
-        'Full Thermal Balance ($T_{2m}$ + $D_{2m}$ + $RH$)',
-        'Triple Layer (Country, State, District)',
-        'IEEE GRSS Research-to-Operations'
-    ]
-}
+# comparison_data = {
+#     'Feature Core': [
+#         'Primary Data Parameter',
+#         'Spatial Grid Resolution',
+#         'Temporal Scale',
+#         'Physiological Factoring',
+#         'Boundary Overlays',
+#         'Application Aim'
+#     ],
+#     'Traditional IMD Alerts': [
+#         'Absolute $T_{max}$ Ambient',
+#         'Station-Based / District Poly',
+#         'Daily / Seasonal Forecasts',
+#         'None (Meteorological Only)',
+#         'Macro-scale political',
+#         'National Public Advisories'
+#     ],
+#     'NWS HeatRisk Model': [
+#         'Climatological Anomalies',
+#         'County-Level Grids',
+#         '7-Day Rolling Horizon',
+#         'Basic Temperature/Anomalies',
+#         'US County Borders',
+#         'Continental US Warning System'
+#     ],
+#     'India HeatRisk Tracker (IEEE REACT)': [
+#         'UTCI + Absolute $T_{max}$',
+#         '0.25° Mesh (~28km)',
+#         'Hourly Arrays over 5-Day Stream',
+#         'Full Thermal Balance ($T_{2m}$ + $D_{2m}$ + $RH$)',
+#         'Triple Layer (Country, State, District)',
+#         'IEEE GRSS Research-to-Operations'
+#     ]
+# }
 
-comparison_df = pd.DataFrame(comparison_data)
-st.dataframe(comparison_df, use_container_width=True, hide_index=True)
+# comparison_df = pd.DataFrame(comparison_data)
+# st.dataframe(comparison_df, use_container_width=True, hide_index=True)
 
-st.divider()
+# st.divider()
 
-# ==========================================
-# METHODOLOGY & TECHNICAL BUFFER
-# ==========================================
-st.markdown("## 🔬 Technical Architecture & Methodology")
+# # ==========================================
+# # METHODOLOGY & TECHNICAL BUFFER
+# # ==========================================
+# st.markdown("## 🔬 Technical Architecture & Methodology")
 
-methodology = st.container()
-with methodology:
-    col1, col2 = st.columns(2)
+# methodology = st.container()
+# with methodology:
+#     col1, col2 = st.columns(2)
     
-    with col1:
-        st.markdown("""
-        ### 📥 Data Acquisition Layer
-        - **Source Engine:** ECMWF OpenData Operational Forecast Stream
-        - **Atmospheric Fields:** 2-meter Temperature (`2t`), 2-meter Dewpoint (`2d`), Maximum Temperature in past 3 hours (`mx2t3`)
-        - **Spatial Subset Matrix:** Custom bounding box for Mainland India domain ($6^\circ\text{N} \rightarrow 38^\circ\text{N}$, $66^\circ\text{E} \rightarrow 98^\circ\text{E}$)
-        - **Dynamic Fallback:** Integrated with an on-the-fly analytical grid generator to handle runtime connection timeouts.
-        """)
+#     with col1:
+#         st.markdown("""
+#         ### 📥 Data Acquisition Layer
+#         - **Source Engine:** ECMWF OpenData Operational Forecast Stream
+#         - **Atmospheric Fields:** 2-meter Temperature (`2t`), 2-meter Dewpoint (`2d`), Maximum Temperature in past 3 hours (`mx2t3`)
+#         - **Spatial Subset Matrix:** Custom bounding box for Mainland India domain ($6^\circ\text{N} \rightarrow 38^\circ\text{N}$, $66^\circ\text{E} \rightarrow 98^\circ\text{E}$)
+#         - **Dynamic Fallback:** Integrated with an on-the-fly analytical grid generator to handle runtime connection timeouts.
+#         """)
     
-    with col2:
-        st.markdown("""
-        ### ⚙️ Processing & Visualization Pipelines
-        1. **Ingestion & Swap:** Data loaded into `xarray.Dataset`, swapping operational forecasting steps to global validated times.
-        2. **Derived Rh Matrix:** Calculates relative humidity arrays from dewpoint saturation equations.
-        3. **UTCI Synthesis:** Evaluates multi-variable arrays into single scalar biometeorological equivalent grids.
-        4. **Vector Boundary Overlay:** Blends spatial rasters with high-precision DataMeet/GADM-derived GeoJSON lines.
-        """)
+#     with col2:
+#         st.markdown("""
+#         ### ⚙️ Processing & Visualization Pipelines
+#         1. **Ingestion & Swap:** Data loaded into `xarray.Dataset`, swapping operational forecasting steps to global validated times.
+#         2. **Derived Rh Matrix:** Calculates relative humidity arrays from dewpoint saturation equations.
+#         3. **UTCI Synthesis:** Evaluates multi-variable arrays into single scalar biometeorological equivalent grids.
+#         4. **Vector Boundary Overlay:** Blends spatial rasters with high-precision DataMeet/GADM-derived GeoJSON lines.
+#         """)
 
-st.divider()
+# st.divider()
 
 # ==========================================
 # DISCLAIMER & COMPETITION FOOTER
@@ -911,7 +904,7 @@ st.divider()
 st.warning("""
 ### ⚠️ Operational Research Disclaimer
 
-**This application is an experimental prototype engineered for scientific validation and review within the IEEE GRSS REACT Competition framework.**
+**This application is an experimental prototype for the EO4SDG (Earth Observation for Sustainable Development Goals) competition organized by the REACT (Remote Sensing Environment, Analysis, and Climate Technologies) Technical Committee, part of the IEEE Geoscience and Remote Sensing Society. **
 
 - ❌ Do NOT utilize this interface as a standalone decision toolkit for health or safety protocols.
 - ✅ Always monitor official real-time statements and formal heatwave declarations published by the **India Meteorological Department (IMD)**.
