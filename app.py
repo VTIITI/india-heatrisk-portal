@@ -2868,3 +2868,15 @@ try:
 
 except Exception as e:
     st.error(f"⚠️ **Error displaying operational map layouts**: {str(e)}")
+
+
+
+st.divider()
+st.markdown("""
+<div style='text-align: center; color: #666; padding: 1rem;'>
+    <small>
+    🌍 Data Source: ECMWF OpenData | 🧪 Indices: NWS Heat Index, WBGT (outdoor approx.), Humidex, Thom's Discomfort Index<br>
+    🗺️ Boundaries: DataMeet / GADM-derived state &amp; district GeoJSON<br>
+    ⚠️ <strong>Disclaimer:</strong> This is a prototype system for research purposes.
+    Always follow official weather alerts and advisories from IMD.
+    </small>
